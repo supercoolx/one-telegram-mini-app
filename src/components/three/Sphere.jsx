@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Vector2 } from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 
@@ -107,7 +107,8 @@ const fragmentShader = `
     uniform vec2 u_resolution;
     void main() {
         vec2 st = gl_FragCoord.xy / u_resolution;
-        gl_FragColor = vec4(vec3(1.0, 1.0, 1.0), 1.0);
+        float color = 0.8;
+        gl_FragColor = vec4(vec3(color), 1.0);
     }
 `;
 
@@ -124,22 +125,63 @@ function SphereMesh() {
         material.uniforms.u_resolution.value.set(size.width, size.height);
     });
 
-    const handleClick = () => {
-
-    }
-
     return (
-        <mesh onClick={handleClick}>
-            <icosahedronGeometry args={[1.2, 10]} />
+        <mesh>
+            <sphereGeometry args={[1.2, 28, 28]} />
             <shaderMaterial ref={materialRef} uniforms={uniforms} wireframe={true} vertexShader={vertexShader} fragmentShader={fragmentShader} />
         </mesh>
     );
 }
 
-export default function App() {
+const PlusOne = () => {
+    const [plusOnes, setPlusOnes] = useState([]);
+
+    const handleTap = () => {
+        const sphereCenter = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+        };
+
+        // Generate random positions around the sphere
+        const angle = Math.random() * Math.PI * 2; // Random angle
+        const radius = 120; // Distance from the center of the sphere
+        const plusOnePosition = {
+            id: Date.now(),
+            x: sphereCenter.x + Math.cos(angle) * (radius + 20 * Math.random()) - 10,
+            y: sphereCenter.y + Math.sin(angle) * (radius + 20 * Math.random()) - 10,
+        };
+
+        setPlusOnes((prevPlusOnes) => [...prevPlusOnes, plusOnePosition]);
+
+        // Remove after a short delay
+        setTimeout(() => {
+            setPlusOnes((prevPlusOnes) => prevPlusOnes.filter((plusOne) => plusOne.id !== plusOnePosition.id));
+        }, 1000); // Adjust time for how long you want it to show
+    };
+
     return (
-        <Canvas style={{ width: '100vw', height: '100vh' }}>
-            <SphereMesh />
-        </Canvas>
+        <div onClick={handleTap} className="absolute inset-0 w-screen h-screen">
+            {plusOnes.map((plusOne) => (
+                <span
+                    key={plusOne.id}
+                    className="absolute pointer-events-none animate-fadeup text-[20px] font-bold transition-opacity duration-1000"
+                    style={{ left: plusOne.x, top: plusOne.y }}
+                >
+                    +1
+                </span>
+            ))}
+        </div>
+    )
+}
+
+export default function Sphere({ onClick }) {
+
+    return (
+        <Fragment>
+            <Canvas style={{ width: '100vw', height: '100vh' }}>
+                <SphereMesh />
+            </Canvas>
+            <PlusOne />
+        </Fragment>
     );
 }
