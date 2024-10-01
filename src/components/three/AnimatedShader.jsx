@@ -48,7 +48,8 @@ void main() {
 
 const AnimatedShaderMesh = () => {
     const materialRef = useRef(null);
-    const { size } = useThree();
+    const { size, gl } = useThree();
+    gl.setPixelRatio(1);
 
     useFrame(({ clock }) => {
         if (materialRef.current) {

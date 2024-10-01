@@ -120,7 +120,8 @@ const fragmentShader = `
 
 const StartShaderMesh = () => {
     const materialRef = useRef(null);
-    const { size } = useThree();
+    const { size, gl } = useThree();
+    gl.setPixelRatio(1);
 
     useFrame(({ clock }) => {
         if (materialRef.current) {
@@ -137,7 +138,7 @@ const StartShaderMesh = () => {
 
     return (
         <mesh>
-            <planeGeometry args={[2, 2]} />
+            <planeGeometry args={[3, 3]} />
             <shaderMaterial
                 ref={materialRef}
                 uniforms={uniforms}

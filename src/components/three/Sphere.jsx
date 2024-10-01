@@ -113,75 +113,33 @@ const fragmentShader = `
 `;
 
 function SphereMesh() {
+    const meshRef = useRef();
     const materialRef = useRef();
     const { size } = useThree();
     const uniforms = {
         u_resolution: { type: 'v2', value: new Vector2(window.innerWidth, window.innerHeight) },
         u_time: { type: 'f', value: 0.0 }
     }
-    useFrame(({ clock }) => {
+    useFrame(({ clock, delta }) => {
+        // meshRef.current.rotation.y = delta * 0.05;
         const material = materialRef.current;
         material.uniforms.u_time.value = clock.getElapsedTime();
-        material.uniforms.u_resolution.value.set(size.width, size.height);
+        material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
     });
 
     return (
-        <mesh>
+        <mesh ref={meshRef}>
             <sphereGeometry args={[1.2, 28, 28]} />
             <shaderMaterial ref={materialRef} uniforms={uniforms} wireframe={true} vertexShader={vertexShader} fragmentShader={fragmentShader} />
         </mesh>
     );
 }
 
-const PlusOne = () => {
-    const [plusOnes, setPlusOnes] = useState([]);
-
-    const handleTap = () => {
-        const sphereCenter = {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2,
-        };
-
-        // Generate random positions around the sphere
-        const angle = Math.random() * Math.PI * 2; // Random angle
-        const radius = 120; // Distance from the center of the sphere
-        const plusOnePosition = {
-            id: Date.now(),
-            x: sphereCenter.x + Math.cos(angle) * (radius + 20 * Math.random()) - 10,
-            y: sphereCenter.y + Math.sin(angle) * (radius + 20 * Math.random()) - 10,
-        };
-
-        setPlusOnes((prevPlusOnes) => [...prevPlusOnes, plusOnePosition]);
-
-        // Remove after a short delay
-        setTimeout(() => {
-            setPlusOnes((prevPlusOnes) => prevPlusOnes.filter((plusOne) => plusOne.id !== plusOnePosition.id));
-        }, 1000); // Adjust time for how long you want it to show
-    };
-
-    return (
-        <div onClick={handleTap} className="absolute inset-0 w-screen h-screen">
-            {plusOnes.map((plusOne) => (
-                <span
-                    key={plusOne.id}
-                    className="absolute text-white pointer-events-none animate-fadeup text-[20px] font-bold transition-opacity duration-1000"
-                    style={{ left: plusOne.x, top: plusOne.y }}
-                >
-                    +1
-                </span>
-            ))}
-        </div>
-    )
-}
-
 export default function Sphere({ onClick }) {
 
     return (
-        <Fragment>
-            <Canvas style={{ width: '100vw', height: '100vh' }}>
-                <SphereMesh />
-            </Canvas>
-            <PlusOne />
-        </Fragment>
+        <Canvas style={{ width: '100vw', height: '100vh' }}>
+            <SphereMesh />
+        </Canvas>
     );
 }
