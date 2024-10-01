@@ -164,7 +164,7 @@ const PlusOne = () => {
             {plusOnes.map((plusOne) => (
                 <span
                     key={plusOne.id}
-                    className="absolute pointer-events-none animate-fadeup text-[20px] font-bold transition-opacity duration-1000"
+                    className="absolute text-white pointer-events-none animate-fadeup text-[20px] font-bold transition-opacity duration-1000"
                     style={{ left: plusOne.x, top: plusOne.y }}
                 >
                     +1
