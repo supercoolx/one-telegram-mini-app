@@ -1,5 +1,5 @@
 import { Fragment, useRef, useState } from 'react';
-import { Vector2 } from 'three';
+import { Vector2, Camera } from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 
 const vertexShader = `
@@ -96,10 +96,10 @@ const vertexShader = `
         return 2.2 * n_xyz;
     }
     void main() {
-        float noise = pnoise(position + u_time, vec3(10.0));
+        float noise = 8.0 * pnoise(position + u_time, vec3(10.0));
         float displacement = noise / 10.0;
         vec3 newPosition = position + normal * displacement;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 3.0);
     }
 `;
 
@@ -107,8 +107,7 @@ const fragmentShader = `
     uniform vec2 u_resolution;
     void main() {
         vec2 st = gl_FragCoord.xy / u_resolution;
-        float color = 0.8;
-        gl_FragColor = vec4(vec3(color), 1.0);
+        gl_FragColor = vec4(vec3(st.x, st.y, 1.0), 1.0);
     }
 `;
 
@@ -116,12 +115,13 @@ function SphereMesh() {
     const meshRef = useRef();
     const materialRef = useRef();
     const { size } = useThree();
+    
     const uniforms = {
         u_resolution: { type: 'v2', value: new Vector2(window.innerWidth, window.innerHeight) },
         u_time: { type: 'f', value: 0.0 }
     }
     useFrame(({ clock, delta }) => {
-        // meshRef.current.rotation.y = delta * 0.05;
+        // meshRef.current.rotation.y += delta * 0.05;
         const material = materialRef.current;
         material.uniforms.u_time.value = clock.getElapsedTime();
         material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
@@ -129,7 +129,7 @@ function SphereMesh() {
 
     return (
         <mesh ref={meshRef}>
-            <sphereGeometry args={[1.2, 28, 28]} />
+            <icosahedronGeometry args={[4, 18]} />
             <shaderMaterial ref={materialRef} uniforms={uniforms} wireframe={true} vertexShader={vertexShader} fragmentShader={fragmentShader} />
         </mesh>
     );
