@@ -65,9 +65,9 @@ const PlusOne = ({ EE }) => {
 function Home() {
     const EE = new EventEmitter();
     const startShader = useRef();
-    const [visibleSphere, setVisibleSphere] = useState(true);
-    const [visibleShader, setVisibleShader] = useState(true);
-    const [visibleStartUpShader, setVisibleStartUpShader] = useState(false);
+    const [visibleSphere, setVisibleSphere] = useState(false);
+    const [visibleShader, setVisibleShader] = useState(false);
+    const [visibleStartUpShader, setVisibleStartUpShader] = useState(true);
 
     const handleEntrance = () => {
         startShader.current.classList.remove('animate-fadein');
