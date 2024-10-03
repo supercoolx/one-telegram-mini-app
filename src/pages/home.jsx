@@ -1,12 +1,16 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import Sphere from "@/components/three/Sphere";
+import WhiteSphere from "@/components/three/WhiteSphere";
 import AnimatedShader from "@/components/three/AnimatedShader";
 import StartShader from "@/components/three/StartShader";
+import OceanShader from "@/components/three/OceanShader";
+import EventEmitter from "eventemitter3";
 
-const PlusOne = () => {
+const PlusOne = ({ EE }) => {
     const [plusOnes, setPlusOnes] = useState([]);
 
     const handleTap = () => {
+        EE.emit('tap');
         const sphereCenter = {
             x: window.innerWidth / 2,
             y: window.innerHeight / 2,
@@ -30,7 +34,10 @@ const PlusOne = () => {
     };
 
     return (
-        <div onClick={handleTap} className="absolute inset-0 w-screen h-screen">
+        <div className="absolute inset-0 w-screen h-screen">
+            <button onClick={handleTap} className="absolute flex justify-center items-center rounded-full border-4 border-yellow-400 active:border-yellow-600 top-1/2 left-1/2 w-[100px] h-[100px] -translate-x-1/2 -translate-y-1/2 active:scale-90 transition-all duration-300 outline-none">
+                <img src="/imgs/cursor1.png" className="h-[60px]" alt="" />
+            </button>
             {plusOnes.map((plusOne) => (
                 <span
                     key={plusOne.id}
@@ -56,10 +63,11 @@ const PlusOne = () => {
 }
 
 function Home() {
+    const EE = new EventEmitter();
     const startShader = useRef();
-    const [visibleSphere, setVisibleSphere] = useState(false);
-    const [visibleShader, setVisibleShader] = useState(false);
-    const [visibleStartUpShader, setVisibleStartUpShader] = useState(true);
+    const [visibleSphere, setVisibleSphere] = useState(true);
+    const [visibleShader, setVisibleShader] = useState(true);
+    const [visibleStartUpShader, setVisibleStartUpShader] = useState(false);
 
     const handleEntrance = () => {
         startShader.current.classList.remove('animate-fadein');
@@ -71,18 +79,15 @@ function Home() {
         }, 5000);
     }
 
-    const handleTap = () => {
-        
-    }
-
     return (
         <Fragment>
-            { visibleSphere && <div className="absolute z-10 animate-fadein">
-                <Sphere onClick={handleTap}  />
-                <PlusOne />
+            { visibleSphere && <div className="absolute z-20 animate-fadein">
+                <WhiteSphere EE={EE}  />
+                <PlusOne EE={EE} />
             </div> }
-            { visibleShader && <div className="absolute top-0 opacity-30 ">
-                <AnimatedShader />
+            { visibleShader && <div className="absolute top-0">
+                {/* <AnimatedShader /> */}
+                <OceanShader />
             </div> }
             { visibleStartUpShader && <div ref={startShader} onClick={handleEntrance} className="absolute top-0 text-white animate-fadein">
                 <StartShader />
