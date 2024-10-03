@@ -122,8 +122,8 @@ function WhiteSphereMesh({ EE }) {
     useEffect(() => {
         EE.on('tap', () => {
             // materialRef.current.uniforms.u_red.value -= 0.05;
-            if (materialRef.current.uniforms.u_green.value > 0.6) materialRef.current.uniforms.u_green.value -= 0.04;
-            materialRef.current.uniforms.u_blue.value -= 0.1;
+            if (materialRef.current.uniforms.u_green.value > 0.6) materialRef.current.uniforms.u_green.value -= 0.08;
+            materialRef.current.uniforms.u_blue.value -= 0.2;
             materialRef.current.uniforms.u_size.value = 20.0;
             setTimeout(() => {
                 materialRef.current.uniforms.u_size.value = 8.0;
@@ -146,8 +146,8 @@ function WhiteSphereMesh({ EE }) {
         // console.log(delta);
         material.uniforms.u_time.value = clock.getElapsedTime();
         // console.log(material.uniforms.u_green.value);
-        if (material.uniforms.u_green.value < 1.0) material.uniforms.u_green.value += 0.01;
-        if (material.uniforms.u_blue.value < 1.0) material.uniforms.u_blue.value += 0.01;
+        if (material.uniforms.u_green.value < 1.0) material.uniforms.u_green.value += 0.05;
+        if (material.uniforms.u_blue.value < 1.0) material.uniforms.u_blue.value += 0.05;
         material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
     });
 

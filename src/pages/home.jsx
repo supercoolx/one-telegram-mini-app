@@ -35,8 +35,9 @@ const PlusOne = ({ EE }) => {
 
     return (
         <div className="absolute inset-0 w-screen h-screen">
-            <button onClick={handleTap} className="absolute group flex justify-center items-center rounded-full border-4 border-yellow-400 top-1/2 left-1/2 w-[100px] h-[100px] -translate-x-1/2 -translate-y-1/2 outline-none">
-                <img src="/imgs/cursor1.png" className="h-[60px] group-active:scale-125 transition-all duration-300" alt="" />
+            <button onClick={handleTap} className="absolute group flex justify-center items-center rounded-full top-1/2 left-1/2 w-[180px] h-[180px] -translate-x-1/2 -translate-y-1/2 outline-none">
+                <img src="/imgs/Finger.png" className="absolute h-[100px] group-active:scale-125 transition-all duration-300" alt="" />
+                <img src="/imgs/GoldRing.png" className="" alt="" />
             </button>
             {plusOnes.map((plusOne) => (
                 <span
