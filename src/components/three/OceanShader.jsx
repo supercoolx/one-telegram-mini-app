@@ -393,7 +393,7 @@ const OceanShaderMesh = () => {
 
 const OceanShader = () => (
     <Fragment>
-        <div className="absolute inset-0 z-10 w-screen h-screen bg-blue-500/50" />
+        <div className="absolute inset-0 z-10 w-screen h-screen bg-gradient-to-t from-blue-500 via-blue-500/30 to-transparent" />
         <Canvas style={{ width: '100vw', height: '100vh' }}>
             <OceanShaderMesh />
         </Canvas>

@@ -35,8 +35,8 @@ const PlusOne = ({ EE }) => {
 
     return (
         <div className="absolute inset-0 w-screen h-screen">
-            <button onClick={handleTap} className="absolute flex justify-center items-center rounded-full border-4 border-yellow-400 active:border-yellow-600 top-1/2 left-1/2 w-[100px] h-[100px] -translate-x-1/2 -translate-y-1/2 active:scale-90 transition-all duration-300 outline-none">
-                <img src="/imgs/cursor1.png" className="h-[60px]" alt="" />
+            <button onClick={handleTap} className="absolute group flex justify-center items-center rounded-full border-4 border-yellow-400 top-1/2 left-1/2 w-[100px] h-[100px] -translate-x-1/2 -translate-y-1/2 outline-none">
+                <img src="/imgs/cursor1.png" className="h-[60px] group-active:scale-125 transition-all duration-300" alt="" />
             </button>
             {plusOnes.map((plusOne) => (
                 <span
@@ -47,7 +47,7 @@ const PlusOne = ({ EE }) => {
                     +1
                 </span>
             ))}
-            <div className="relative mt-[500px] w-[250px] mx-auto border-2 border-white rounded-[5px] h-[18px] grid [grid-template-columns:repeat(17,minmax(0,1fr))] gap-[2px] px-[2px] py-px">
+            {/* <div className="relative mt-[500px] w-[250px] mx-auto border-2 border-white rounded-[5px] h-[18px] grid [grid-template-columns:repeat(17,minmax(0,1fr))] gap-[2px] px-[2px] py-px">
                 <div className="bg-white" />
                 <div className="bg-white" />
                 <div className="bg-white" />
@@ -57,7 +57,7 @@ const PlusOne = ({ EE }) => {
                 <div className="bg-white" />
                 <div className="bg-white" />
                 <div className="absolute top-1/2 -translate-y-1/2 right-1 leading-none text-white text-[10px] font-bold">global sync signal</div>
-            </div>
+            </div> */}
         </div>
     )
 }

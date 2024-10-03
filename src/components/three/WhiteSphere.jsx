@@ -111,7 +111,7 @@ const fragmentShader = `
     uniform float u_blue;
     void main() {
         vec2 st = gl_FragCoord.xy / u_resolution;
-        gl_FragColor = vec4(vec3(u_red, u_green, u_blue), (st.y - st.x + 0.3) / 4.0);
+        gl_FragColor = vec4(vec3(u_red, u_green, u_blue), (st.y - st.x + 0.3) / 4.0 + 0.1 * (st.y - st.x));
     }
 `;
 
@@ -121,9 +121,9 @@ function WhiteSphereMesh({ EE }) {
 
     useEffect(() => {
         EE.on('tap', () => {
-            // materialRef.current.uniforms.u_red.value -= 0.0003;
-            materialRef.current.uniforms.u_green.value -= 0.05;
-            materialRef.current.uniforms.u_blue.value -= 0.05;
+            // materialRef.current.uniforms.u_red.value -= 0.05;
+            if (materialRef.current.uniforms.u_green.value > 0.6) materialRef.current.uniforms.u_green.value -= 0.04;
+            materialRef.current.uniforms.u_blue.value -= 0.1;
             materialRef.current.uniforms.u_size.value = 20.0;
             setTimeout(() => {
                 materialRef.current.uniforms.u_size.value = 8.0;
