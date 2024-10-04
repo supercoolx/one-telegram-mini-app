@@ -1,14 +1,16 @@
-import { Fragment, useRef } from "react";
+import { Fragment, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 const vertexShader = `
+precision mediump float;
 void main() {
   gl_Position = vec4(position, 1.0);
 }
 `;
 
 const fragmentShader = `
+precision mediump float;
 uniform float iTime;
 uniform vec2 iResolution;
 // 1: show cloud noise, 0:show scene
@@ -370,13 +372,16 @@ const OceanShaderMesh = () => {
             const material = materialRef.current;
             material.uniforms.iTime.value = clock.getElapsedTime();
             material.uniforms.iResolution.value.set(size.width, size.height);
+			gl.setSize(size.width, size.height);
         }
     });
 
-    const uniforms = {
-        iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector2(size.width, size.height) },
-    };
+    const uniforms = useMemo(() => {
+		return {
+			iTime: { value: 0 },
+			iResolution: { value: new THREE.Vector2(size.width, size.height) },
+		};
+	}, []);
 
     return (
         <mesh>

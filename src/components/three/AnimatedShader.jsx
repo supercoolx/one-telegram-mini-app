@@ -3,12 +3,14 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 const vertexShader = `
+precision mediump float;
 void main() {
   gl_Position = vec4(position, 1.0);
 }
 `;
 
 const fragmentShader = `
+precision mediump float;
 uniform float iTime;
 uniform vec2 iResolution;
 

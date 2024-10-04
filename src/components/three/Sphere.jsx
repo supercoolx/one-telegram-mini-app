@@ -3,6 +3,7 @@ import { Vector2, Camera } from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 
 const vertexShader = `
+    precision mediump float;
     uniform float u_time;
     vec3 mod289(vec3 x)
     {
@@ -104,6 +105,7 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+    precision mediump float;
     uniform vec2 u_resolution;
     void main() {
         vec2 st = gl_FragCoord.xy / u_resolution;

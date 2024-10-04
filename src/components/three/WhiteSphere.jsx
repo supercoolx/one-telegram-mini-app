@@ -1,8 +1,9 @@
-import { Fragment, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { Vector2, Camera } from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 
 const vertexShader = `
+    precision mediump float;
     uniform float u_time;
     uniform float u_size;
     vec3 mod289(vec3 x)
@@ -105,40 +106,47 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+    precision mediump float;
     uniform vec2 u_resolution;
     uniform float u_red;
     uniform float u_green;
     uniform float u_blue;
     void main() {
         vec2 st = gl_FragCoord.xy / u_resolution;
-        gl_FragColor = vec4(vec3(u_red, u_green, u_blue), (st.y - st.x + 0.3) / 4.0 + 0.1 * (st.y - st.x));
+        // gl_FragColor = vec4(vec3(u_red, u_green, u_blue), (st.y - st.x + 0.5) / 4.0 + 0.1 * (st.y - st.x));
+        gl_FragColor = vec4(vec3(u_red, u_green, u_blue), 0.5);
     }
 `;
 
 function WhiteSphereMesh({ EE }) {
     const meshRef = useRef();
     const materialRef = useRef();
+    const { gl } = useThree();
+    gl.setPixelRatio(1);
 
     useEffect(() => {
         EE.on('tap', () => {
             // materialRef.current.uniforms.u_red.value -= 0.05;
-            if (materialRef.current.uniforms.u_green.value > 0.6) materialRef.current.uniforms.u_green.value -= 0.08;
-            materialRef.current.uniforms.u_blue.value -= 0.2;
+            if (materialRef.current.uniforms.u_green.value > 0.77) materialRef.current.uniforms.u_green.value -= 0.04;
+            if (materialRef.current.uniforms.u_blue.value > 0.14) materialRef.current.uniforms.u_blue.value -= 0.15;
             materialRef.current.uniforms.u_size.value = 20.0;
+            gl.setSize(window.innerWidth, window.innerHeight);
             setTimeout(() => {
                 materialRef.current.uniforms.u_size.value = 8.0;
             }, 100);
         });
     }, []);
 
-    const uniforms = {
-        u_resolution: { type: 'v2', value: new Vector2(window.innerWidth, window.innerHeight) },
-        u_time: { type: 'f', value: 0.0 },
-        u_red: { type: 'f', value: 1.0 },
-        u_green: { type: 'f', value: 1.0 },
-        u_blue: { type: 'f', value: 1.0 },
-        u_size: { type: 'f', value: 8.0 },
-    }
+    const uniforms = useMemo(() => {
+        return {
+            u_resolution: { type: 'v2', value: new Vector2(window.innerWidth, window.innerHeight) },
+            u_time: { type: 'f', value: 0.0 },
+            u_red: { type: 'f', value: 1.0 },
+            u_green: { type: 'f', value: 1.0 },
+            u_blue: { type: 'f', value: 1.0 },
+            u_size: { type: 'f', value: 8.0 },
+        }
+    }, []);
     useFrame(({ clock }) => {
         // meshRef.current.rotation.y += delta * 0.05;
         const material = materialRef.current;
@@ -146,8 +154,8 @@ function WhiteSphereMesh({ EE }) {
         // console.log(delta);
         material.uniforms.u_time.value = clock.getElapsedTime();
         // console.log(material.uniforms.u_green.value);
-        if (material.uniforms.u_green.value < 1.0) material.uniforms.u_green.value += 0.05;
-        if (material.uniforms.u_blue.value < 1.0) material.uniforms.u_blue.value += 0.05;
+        if (material.uniforms.u_green.value < 1.0) material.uniforms.u_green.value += 0.006;
+        if (material.uniforms.u_blue.value < 1.0) material.uniforms.u_blue.value += 0.022;
         material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
     });
 
