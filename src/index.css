@@ -13,4 +13,5 @@ body {
     color: white;
     cursor: pointer;
     user-select: none;
+    touch-action: manipulation;
 }
